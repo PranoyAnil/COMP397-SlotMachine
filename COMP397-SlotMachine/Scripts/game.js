@@ -98,9 +98,7 @@ var betmax = 0;
 var temp;
 var winrate = 0;
 var jackpot = 5000;
-var lossNumber = 0;
-var winNumber = 0;
-var winRatio = 0;
+var loss = 0;
 // Preloader Function
 function preload() {
     assets = new createjs.LoadQueue();
@@ -242,21 +240,18 @@ function WinRate() {
         else {
             winrate = bet * 1;
         }
-        winNumber++;
+        winrate++;
         showWinMessage();
     }
     else {
-        lossNumber++;
+        loss++;
         showLossMessage();
     }
 }
 // Callback function that allows me to respond to button click events
+//spinButton function
 function spinButtonClicked(event) {
-    // var spin;
     createjs.Sound.play("clicked");
-    //spinResult = Reels();
-    //fruits = spinResult[0] + " - " + spinResult[1] + " - " + spinResult[2];
-    //console.log(fruits);
     if (bet <= playercredit) {
         playercredit = playercredit - bet;
         temp = playercredit;
@@ -416,11 +411,13 @@ function spinButtonClicked(event) {
     //showLossMessage();
     //showWinMessage();
 }
+//resetButton function
 function resetButtonClicked(event) {
     stage.removeChild(reel1);
     stage.removeChild(reel2);
     stage.removeChild(reel3);
     stage.removeChild(betLabel);
+    stage.removeChild(spinresult);
     stage.removeChild(playercreditLabel);
     playercredit = 5000;
     playercreditLabel = new createjs.Text("" + playercredit, "20px Consolas", "#000000");
@@ -428,6 +425,7 @@ function resetButtonClicked(event) {
     playercreditLabel.y = 303;
     stage.addChild(playercreditLabel);
 }
+//reset Fruit var
 function resetFruitTally() {
     grapes = 0;
     pears = 0;
@@ -439,13 +437,11 @@ function resetFruitTally() {
     horseshoes = 0;
 }
 function resetAll() {
-    playercredit = 1000;
+    playercredit = 5000;
     winrate = 0;
     jackpot = 5000;
-    // var  turn = 0;
     betmax = bet1 = bet10 = 0;
-    lossNumber = 0;
-    winRatio = 0;
+    loss = 0;
 }
 function checkJackPot() {
     /* compare two random values */
@@ -457,6 +453,7 @@ function checkJackPot() {
         jackpot = 5000;
     }
 }
+//maxButton
 function betmaxButtonClicked(event) {
     if (playercredit > 0) {
         betmax = playercredit;
@@ -476,6 +473,7 @@ function betmaxButtonClicked(event) {
         alert("You dont have sufficient credit");
     }
 }
+//bet ten Button
 function bettenButtonClicked(event) {
     if (playercredit >= 10) {
         playercredit -= 10;
@@ -496,6 +494,7 @@ function bettenButtonClicked(event) {
         alert("You dont have sufficient credit");
     }
 }
+//bet one Button
 function betoneButtonClicked(event) {
     if (playercredit >= 1) {
         playercredit -= 1;
@@ -516,6 +515,7 @@ function betoneButtonClicked(event) {
         alert("You dont have sufficient credit");
     }
 }
+//WinMessage
 function showWinMessage() {
     stage.removeChild(spinresult);
     stage.removeChild(playercreditLabel);
@@ -529,7 +529,7 @@ function showWinMessage() {
     resetFruitTally();
     checkJackPot();
 }
-/* Utility function to show a loss message and reduce player money */
+//Loss Message
 function showLossMessage() {
     stage.removeChild(spinresult);
     stage.removeChild(playercreditLabel);
@@ -548,9 +548,8 @@ function main() {
     background = new createjs.Bitmap(assets.getResult("background"));
     stage.addChild(background);
     //add player credit
-    var pc = playercredit.toString();
     stage.removeChild(playercreditLabel);
-    playercreditLabel = new createjs.Text(pc, "20px Consolas", "#000000");
+    playercreditLabel = new createjs.Text("" + playercredit, "20px Consolas", "#000000");
     playercreditLabel.x = 36;
     playercreditLabel.y = 303;
     stage.addChild(playercreditLabel);
